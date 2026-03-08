@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MALL Proof Checker</title>
+</head>
+
+<body>
+    <h1>MALL 証明 / 反例チェッカー</h1>
+    <p>
+        論理式を入力してください（例: A * B -o C）
+    </p>
+    <input type="text" id="formulaInput" placeholder="A * B -o C" style="width:300px ;padding: 5px;">
+    <button id="checkButton">チェックする</button>
+
+    <pre id="resultArea" style="background: #f4f4f4;padding: 10px;margin-top: 20px;border-radius: 5px;"></pre>
+
+    <script>
+        // ボタンが押されたときの処理
+        document.getElementById("checkButton").addEventListener("click", async () => {
+            // 1. 入力欄から文字を取得する
+            const formula = document.getElementById("formulaInput").value;
+
+            // 2. Haskellサーバの"/api/check"にデータを「POST」で送信する
+            const response = await fetch('/api/check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: formula
+            });
+
+            // 3. Haskellからの返事を受け取って画面に出す
+            const resultData = await response.text();
+            document.getElementById("resultArea").innerText = resultData;
+        });
+    </script>
+</body>
+
+</html>
